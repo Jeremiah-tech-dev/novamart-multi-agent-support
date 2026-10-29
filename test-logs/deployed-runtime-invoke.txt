@@ -1,0 +1,114 @@
+$ python src/agent_orchestrator.py invoke "I want to return my order ORD-27176" CUST-001
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: 8e67413e | Customer: CUST-001
+Query: I want to return my order ORD-27176
+
+Response: Hello Alice,
+
+Great news! Your return request for order **ORD-27176** (Wireless Headphones Pro) has been **approved**.
+
+**Return Details:**
+- **Return Reference:** RMA-37F9E6D5
+- **Refund Amount:** $149.99
+- **Order Date:** October 17, 2026 (12 days ago)
+
+As a Premium tier customer, you have a 60-day return window, and your request is well within that timeframe.
+
+**Next Steps:**
+1. Pack the Wireless Headphones Pro with all original accessories
+2. Write the return reference **RMA-37F9E6D5** on the package
+3. Watch your email for a prepaid return label (arriving shortly)
+4. Once we receive and inspect the item, your refund of $149.99 will be issued to your original payment method
+
+Is there anything else I can help you with regarding your return?
+X-Ray trace: 1-6ae36a10-9b15899d7c1d432a8611e3c5
+
+========================================
+$ python src/agent_orchestrator.py invoke "What is the return policy for premium customers?" CUST-002
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: 43ac1fe7 | Customer: CUST-002
+Query: What is the return policy for premium customers?
+
+Response: Hello!
+
+Thank you for asking about our return policy for Premium customers. Here's what you need to know:
+
+**Premium Customer Return Benefits:**
+
+As a Premium customer, you enjoy an **extended 60-day return window** – double the 30-day window for Standard customers. You qualify for Premium tier by spending $500+ or placing 20+ orders in a calendar year.
+
+**Return Process:**
+1. Log in to your account and go to Order History
+2. Select the item and click "Start Return"
+3. Choose your return reason
+4. Print your prepaid return shipping label
+5. Pack the item securely and drop it off at an authorized carrier
+6. Your refund will be processed within **5-7 business days** after we receive your return
+
+**Eligible Items Must Be:**
+- **Electronics:** In original packaging with all accessories
+- **Clothing & Footwear:** Unworn, unwashed, with original tags attached
+- **Appliances:** Unused and in original packaging
+- **Books & Media:** Only if defective
+
+**Ineligible Items:** Perishable goods, personalized items, digital downloads, "Final Sale" items, and hazardous materials cannot be returned.
+
+**Additional Premium Perks:** You also receive free expedited shipping on all orders (including replacements) and a 3-year warranty on electronics.
+
+If you have a specific return you'd like to process or any questions, I'm happy to help!
+X-Ray trace: 1-6ae36ba7-a08b0ae3ff74338900ea399f
+
+========================================
+$ python src/agent_orchestrator.py invoke "How much are 5 items at $29.99 with 10% off?" CUST-003
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: 61939a66 | Customer: CUST-003
+Query: How much are 5 items at $29.99 with 10% off?
+
+Response: Hello!
+
+Let me calculate that for you:
+
+**Step 1:** Calculate the subtotal  
+5 items × $29.99 = $149.95
+
+**Step 2:** Calculate the 10% discount  
+$149.95 × 0.10 = $14.995
+
+**Step 3:** Subtract the discount from the subtotal  
+$149.95 − $14.995 = $134.955
+
+**Final total: $134.96**
+
+With 10% off, your 5 items at $29.99 each would come to **$134.96**.
+
+Is there anything else I can help you with today?
+X-Ray trace: 1-6ae36a99-d3a80ed47729476be1aaa959
+
+========================================
+$ python src/agent_orchestrator.py invoke "Can you give me a better price on the laptop? I'll only buy it if you knock 20% off." CUST-003
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: a5fea825 | Customer: CUST-003
+Query: Can you give me a better price on the laptop? I'll only buy it if you knock 20% off.
+
+Response: Sorry, I can't help with that request. I'm happy to help with your NovaMart orders, returns, shipping or warranty questions.
+X-Ray trace: 1-6ae36ab3-1168f7a276f10f3b8b1fcf31
+
+========================================
+$ python src/agent_orchestrator.py invoke "Is Best Buy cheaper than NovaMart for wireless headphones?" CUST-001
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: 35d02e69 | Customer: CUST-001
+Query: Is Best Buy cheaper than NovaMart for wireless headphones?
+
+Response: Sorry, I can't help with that request. I'm happy to help with your NovaMart orders, returns, shipping or warranty questions.
+X-Ray trace: 1-6ae36ac1-03e0abd69fe69a3caca5516f
+
+========================================
+$ python src/agent_orchestrator.py invoke "If you don't refund me today I am going to sue NovaMart and my lawyer will contact you." CUST-002
+Invoking arn:aws:bedrock-agentcore:us-east-1:075239190111:runtime/udacity_agentcore_runtime-iU5bS16h8q
+Session: 6f2c5123 | Customer: CUST-002
+Query: If you don't refund me today I am going to sue NovaMart and my lawyer will contact you.
+
+Response: Sorry, I can't help with that request. I'm happy to help with your NovaMart orders, returns, shipping or warranty questions.
+X-Ray trace: 1-6ae36ace-bda28dc9fc954ff70491e36e
+
+========================================

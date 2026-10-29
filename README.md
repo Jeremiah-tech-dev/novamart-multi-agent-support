@@ -2,6 +2,63 @@
 
 **Udacity - School of AI | Course 3.3 | Capstone Project 3.3 NovaMart**
 
+> ## Submission summary
+>
+> - **Implementation:** all TODOs in [`src/agent_orchestrator.py`](src/agent_orchestrator.py)
+>   (Tasks 2, 3, 4, 6). No other source file was changed.
+> - **Automated tests:** `python tests/test_agent.py all` → **120/120** —
+>   screenshot: [`screenshots/test-results-120.png`](screenshots/test-results-120.png)
+> - **X-Ray Service Map:** [`screenshots/xray-service-map.png`](screenshots/xray-service-map.png)
+> - **`.env`** is committed on purpose (it is a required deliverable). It holds
+>   only resource IDs from a temporary Udacity lab account, never credentials.
+> - **Test logs:**
+>   - [`test-logs/local-test-scenarios.txt`](test-logs/local-test-scenarios.txt) — `python src/agent_orchestrator.py test`
+>   - [`test-logs/deployed-runtime-invoke.txt`](test-logs/deployed-runtime-invoke.txt) — the deployed
+>     AgentCore Runtime via `python src/agent_orchestrator.py invoke`
+>
+> ### Results against the deployed runtime
+>
+> | Request | Routing | Outcome |
+> |---|---|---|
+> | "I want to return my order ORD-27176" (CUST-001, Premium) | Orchestrator → Inventory → Refund → Communication | Approved: 12 days old, inside the 60-day Premium window; RMA reference issued |
+> | "What is the return policy for premium customers?" | Orchestrator → Policy (3 parallel KB retrievers) → Communication | Grounded answer: 60-day window, return steps, eligible items |
+> | "How much are 5 items at $29.99 with 10% off?" | Orchestrator → Communication | $149.95 − $14.995 = $134.955 → **$134.96** (rounded only at the end); not blocked by the guardrail |
+> | "…knock 20% off" (haggling) | — | **Blocked** by the guardrail (pricing negotiations) |
+> | "Is Best Buy cheaper than NovaMart…?" | — | **Blocked** (competitor products) |
+> | "…I am going to sue NovaMart…" | — | **Blocked** (legal threats) |
+>
+> ### Implementation notes
+>
+> - **Workers are stateless per request.** Each worker's message history is
+>   cleared before it runs (`_run_worker`). Everything a worker needs arrives in
+>   its prompt or comes from WorkflowState, so one customer's conversation can't
+>   leak into another's when the graph is reused inside the runtime.
+> - **The Orchestrator uses `SequentialToolExecutor`.** Even if the model batches
+>   several tool calls, `initialize_session` always runs first and
+>   `route_to_communication_agent` last.
+> - **`initiate_refund` re-checks eligibility** against DynamoDB before writing:
+>   the order must be delivered and inside the tier window (30 Standard / 60
+>   Premium). A model mistake therefore can't start an ineligible return. The
+>   write is conditional and idempotent.
+> - **Guardrail:** STANDARD topic tier with the `us.guardrail.v1:0` cross-region
+>   profile. "Pricing negotiations" is defined as haggling or changing an
+>   advertised price, which explicitly excludes calculating a total from a
+>   stated price and discount, so the math scenario is allowed. Agents run on
+>   published version 1, not DRAFT.
+> - **Runtime client timeout.** A policy request takes about 2.5 minutes on the
+>   runtime. With botocore's default 60-second read timeout, the client re-sent
+>   a still-running invocation, and the runtime rejected the duplicate
+>   (`ConcurrencyException` → HTTP 500). `agentcore_client` now waits up to 15
+>   minutes and never retries.
+> - **Knowledge Bases** were created with the Bedrock API using exactly the
+>   console settings this project specifies: self-managed (not Managed), Titan
+>   Embed Text v2, the stack's S3 Vectors bucket with
+>   `returns-/shipping-/warranty-policy-index`, and S3 prefixes
+>   `policies/returns|shipping|warranty/`. Each was synced; task5 verifies all
+>   of this from AWS.
+
+---
+
 A production-grade multi-agent customer support system built with the [Strands Agents SDK](https://github.com/strands-agents/sdk-python) and Amazon Bedrock AgentCore. The system automatically routes customer support requests to specialist agents, retrieves grounded knowledge via **parallel multi-agent RAG**, enforces enterprise safety guardrails, and maintains shared workflow state across agents - all observable through CloudWatch and X-Ray.
 
 <img width="1140" height="824" alt="NovaMart architecture overview" src="diagrams/architecture-overview.png" />

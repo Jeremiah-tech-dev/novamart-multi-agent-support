@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "name": "default",
+    "account": "075239190111",
+    "region": "us-east-1"
+  }
+]
